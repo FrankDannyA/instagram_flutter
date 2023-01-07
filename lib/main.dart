@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/responsive/mobile_screen_layout.dart';
 import 'package:instagram_flutter/responsive/responsive_layout.dart';
 import 'package:instagram_flutter/responsive/web_screen_layaout.dart';
+import 'package:instagram_flutter/screens/login_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 
 void main() async {
@@ -20,14 +21,6 @@ void main() async {
   } else {
     await Firebase.initializeApp();
   }
-  await Firebase.initializeApp(
-      options: FirebaseOptions(
-          apiKey: "AIzaSyCYbirTvNb0sNLnvNibqCAslYH5Gb3dz1s",
-          authDomain: "instagramflutter-ede55.firebaseapp.com",
-          projectId: "instagramflutter-ede55",
-          storageBucket: "instagramflutter-ede55.appspot.com",
-          messagingSenderId: "138023735994",
-          appId: "1:138023735994:web:3e18cabe3f1406764da883"));
   runApp(const MyApp());
 }
 
@@ -43,9 +36,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.dark()
             .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
         home: Scaffold(
-          body: ResponsiveLayout(
-              webScreenLayout: WebScreenLayaout(),
-              mobileScreenLayout: MobileScreenLayout()),
+          // body: const ResponsiveLayout(
+          //     webScreenLayout: WebScreenLayaout(),
+          //     mobileScreenLayout: MobileScreenLayout()),
+
+          body: LoginScreen(),
         ));
   }
 }
