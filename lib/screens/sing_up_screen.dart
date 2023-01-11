@@ -1,6 +1,12 @@
+import 'dart:ffi';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
 class SingUpScreen extends StatefulWidget {
@@ -15,6 +21,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+  Uint8List? _image;
 
   @override
   void dispose() {
@@ -23,6 +30,13 @@ class _SingUpScreenState extends State<SingUpScreen> {
     _passwordController.dispose();
     _bioController.dispose();
     _usernameController.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -49,16 +63,19 @@ class _SingUpScreenState extends State<SingUpScreen> {
           //circular widget to accept and show our selected file
           Stack(
             children: [
-              const CircleAvatar(
-                radius: 64,
-                backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1672934033380-cb7b08eb46b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=796&q=80'),
-              ),
+              _image != null
+                  ? CircleAvatar(
+                      radius: 64, backgroundImage: MemoryImage(_image!))
+                  : const CircleAvatar(
+                      radius: 64,
+                      backgroundImage: NetworkImage(
+                          'https://images.unsplash.com/photo-1672934033380-cb7b08eb46b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=796&q=80'),
+                    ),
               Positioned(
                   bottom: -10,
                   left: 80,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: selectImage,
                     icon: const Icon(Icons.add_a_photo),
                   ))
             ],
@@ -100,6 +117,15 @@ class _SingUpScreenState extends State<SingUpScreen> {
             height: 24,
           ),
           InkWell(
+            onTap: () async {
+              String res = await AuthMethods().signUpUser(
+                  email: _emailController.text,
+                  username: _usernameController.text,
+                  password: _passwordController.text,
+                  bio: _bioController.text);
+
+              print(res);
+            },
             child: Container(
               child: const Text('Sing up'),
               width: double.infinity,
