@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +20,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   Uint8List? _image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -36,6 +35,27 @@ class _SingUpScreenState extends State<SingUpScreen> {
     Uint8List im = await pickImage(ImageSource.gallery);
     setState(() {
       _image = im;
+    });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text,
+        username: _usernameController.text,
+        password: _passwordController.text,
+        bio: _bioController.text,
+        file: _image!);
+
+    if (res != 'success') {
+      showSnakBar(res, context);
+    }
+
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -117,17 +137,14 @@ class _SingUpScreenState extends State<SingUpScreen> {
             height: 24,
           ),
           InkWell(
-            onTap: () async {
-              String res = await AuthMethods().signUpUser(
-                  email: _emailController.text,
-                  username: _usernameController.text,
-                  password: _passwordController.text,
-                  bio: _bioController.text);
-
-              print(res);
-            },
+            onTap: signUpUser,
             child: Container(
-              child: const Text('Sing up'),
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ))
+                  : const Text('Sing up'),
               width: double.infinity,
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(vertical: 12),
