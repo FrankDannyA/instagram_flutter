@@ -154,6 +154,22 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     : const Padding(
                         padding: EdgeInsets.only(top: 0),
                       ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 3,
+                  width: MediaQuery.of(context).size.width / 0.5,
+                  child: AspectRatio(
+                    aspectRatio: 487 / 451,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: MemoryImage(_file!),
+                          fit: BoxFit.fill,
+                          alignment: FractionalOffset.topCenter,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 Divider(),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,22 +189,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           border: InputBorder.none,
                         ),
                         maxLines: 8,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 45,
-                      width: 45,
-                      child: AspectRatio(
-                        aspectRatio: 487 / 451,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: MemoryImage(_file!),
-                              fit: BoxFit.fill,
-                              alignment: FractionalOffset.topCenter,
-                            ),
-                          ),
-                        ),
                       ),
                     ),
                     const Divider(),
