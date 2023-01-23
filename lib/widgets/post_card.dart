@@ -9,6 +9,7 @@ import 'package:instagram_flutter/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
+import '../utils/global_variebles.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -49,9 +50,10 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
+    final width = MediaQuery.of(context).size.width;
 
     return Container(
-      color: mobileBackgroundColor,
+      color: width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(
         vertical: 10,
       ),
